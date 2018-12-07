@@ -1,10 +1,8 @@
 #!/bin/bash
 
-apt-get -qq update > /dev/null
-apt-get -qq upgrade > /dev/null
+apt-get update -y
 
 apt-get install -y -q postgresql postgresql-contrib
-
 
 # sudo su postgres -c "createdb -E UTF8 -T template0 --locale=en_US.utf8 -O vagrant wtm"
 cp /etc/postgresql/9.5/main/pg_hba.conf /etc/postgresql/9.5/main/pg_hba.orig.conf
@@ -38,13 +36,28 @@ chown -R mattermost:mattermost /opt/mattermost
 chmod -R g+w /opt/mattermost
 echo "Copying Config File"
 # "mmuser:mostest@tcp(dockerhost:3306)/mattermost_test?charset=utf8mb4,utf8&readTimeout=30s&writeTimeout=30s",
-cp /vagrant/config.json /opt/mattermost/config/config.json
+rm /opt/mattermost/config/config.json
+ln -s /vagrant/config.json /opt/mattermost/config/config.json
 sed -i -e 's/mostest/#MATTERMOST_PASSWORD/g' /opt/mattermost/config/config.json
 
 cp /vagrant/mattermost.service /lib/systemd/system/mattermost.service
 systemctl daemon-reload
 
+setcap cap_net_bind_service=+ep /opt/mattermost/bin/mattermost
+
+echo '127.0.0.1		internal.local.com' >> /etc/hosts
+
 echo "Starting PostgreSQL"
 service postgresql start
 echo "Starting Mattermost!"
 service mattermost start
+
+apt-get -y install nginx
+
+ln -s /vagrant/nginx.conf /etc/nginx/sites-available/mattermost
+
+rm /etc/nginx/sites-enabled/default
+
+ln -s /etc/nginx/sites-available/mattermost /etc/nginx/sites-enabled/mattermost
+
+service nginx restart

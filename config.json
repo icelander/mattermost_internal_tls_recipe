@@ -1,6 +1,6 @@
 {
     "ServiceSettings": {
-        "SiteURL": "http://127.0.0.1:8065",
+        "SiteURL": "http://mattermost.local.com:8080",
         "WebsocketURL": "",
         "LicenseFileLocation": "",
         "ListenAddress": ":8065",
@@ -101,8 +101,9 @@
         "IosMinVersion": ""
     },
     "SqlSettings": {
-        "DriverName": "postgres",
-        "DataSource": "postgres://mmuser:mostest@127.0.0.1:5432/mattermost?sslmode=disable&connect_timeout=10",
+        "DriverName": "mysql",        
+        "DataSource": "mattermost:t^dgYdKUseW8@tcp(rds-mysql-56-test.c1tofjhhjx7y.us-east-2.rds.amazonaws.com:3306)/mattermost?charset=utf8mb4,utf8\u0026readTimeout=30s\u0026writeTimeout=30s\u0026tls=true",
+    
         "DataSourceReplicas": [],
         "DataSourceSearchReplicas": [],
         "MaxIdleConns": 20,
