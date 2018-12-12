@@ -1,4 +1,4 @@
-# Mattermost Recipe - Adding TLS to 
+# Mattermost Recipe - Adding TLS to Internal Connections
 
 ## Problem
 
