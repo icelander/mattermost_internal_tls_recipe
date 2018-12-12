@@ -21,7 +21,7 @@ rm /tmp/db_setup.sql
 
 rm -rf /opt/mattermost
 echo "Downloading Mattermost"
-wget --quiet https://releases.mattermost.com/5.4.0/mattermost-5.4.0-linux-amd64.tar.gz
+wget --quiet https://releases.mattermost.com/5.5.0/mattermost-5.5.0-linux-amd64.tar.gz
 echo "Unzipping Mattermost"
 tar -xzf mattermost*.gz
 
@@ -40,12 +40,10 @@ rm /opt/mattermost/config/config.json
 ln -s /vagrant/config.json /opt/mattermost/config/config.json
 sed -i -e 's/mostest/#MATTERMOST_PASSWORD/g' /opt/mattermost/config/config.json
 
-cp /vagrant/mattermost.service /lib/systemd/system/mattermost.service
+ln -s /vagrant/mattermost.service /lib/systemd/system/mattermost.service
 systemctl daemon-reload
 
-setcap cap_net_bind_service=+ep /opt/mattermost/bin/mattermost
-
-echo '127.0.0.1		internal.local.com' >> /etc/hosts
+echo '127.0.0.1		internal.bigapplebank.com' >> /etc/hosts
 
 echo "Starting PostgreSQL"
 service postgresql start
